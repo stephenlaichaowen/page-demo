@@ -21,7 +21,7 @@ Start development
 npm run dev
 ```
 
-## Upload your sapper project to Github
+## Upload your Sapper project to Github
 
 Create a local git repo
 ```
