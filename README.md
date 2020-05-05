@@ -46,7 +46,7 @@ Enter your Repository name and click `Create repository`
 
 Establish remote connection on the command line
 ```
-git remote add origin https://github.com/your-name/your-repo-name.git
+git remote add origin https://github.com/[your-name]/[your-repo-name].git
 ```
 
 Push your local repo to your Github account
@@ -58,7 +58,7 @@ git push origin master
 
 Login your Netlify account
 
-Go to `app.netlify.com/teams/yourteam/sites` page
+Go to `app.netlify.com/teams/[your-team]/sites` page
 
 Click `New site from Git`
 
