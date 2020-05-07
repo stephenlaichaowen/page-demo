@@ -50,9 +50,9 @@
 
 <nav>
 	<ul>
-		<li><a aria-current='{segment === undefined ? "page" : undefined}' href='.'>Home</a></li>
 		<li><a aria-current='{segment === "demo1" ? "page" : undefined}' href='demo1'>Demo 1</a></li>
-		<li><a aria-current='{segment === "demo2" ? "page" : undefined}' href='demo2'>Demo 2</a></li>		
+		<li><a aria-current='{segment === "demo2" ? "page" : undefined}' href='demo2'>Demo 2</a></li>
 		<li><a aria-current='{segment === "demo3" ? "page" : undefined}' href='demo3'>Demo 3</a></li>		
+		<li><a aria-current='{segment === "demo4" ? "page" : undefined}' href='demo4'>Demo 4</a></li>		
 	</ul>
 </nav>
