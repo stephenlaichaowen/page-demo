@@ -12,7 +12,7 @@
 
 <style>
 	nav {	
-    height: 10vh;
+    height: 8vh;
     background: #5b78c7;
     position: relative;
   }
