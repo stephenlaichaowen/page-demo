@@ -67,20 +67,20 @@
     background: linear-gradient(to left, #ba7453, #d1a984);
     z-index: -1;
   }
-  nav {
+  /* nav {
     display: grid;
     grid-template-columns: 10% 1fr 1fr 10%;
     min-height: 10vh;
     color: white;
     align-items: center;
-  }
-  .logo {
+  } */
+  /* .logo {
     grid-column: 2/3;
     font-size: 24px;
   }
   .hamburger {
     justify-self: end;
-  }
+  } */
   section {
     display: flex;
     height: 80vh;
@@ -128,10 +128,10 @@
 
 <div class="body">
   <header>
-    <nav>
+    <!-- <nav>
       <h3 class="logo" bind:this={logo}>Dream Vacation</h3>
       <i class="fas fa-bars fa-2x hamburger" bind:this={burger} />
-    </nav>
+    </nav> -->
     <section>
       <div class="hero" bind:this={hero}>
         <img src={vacation} alt="vacation" />

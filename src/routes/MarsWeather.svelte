@@ -1,0 +1,730 @@
+<script>
+  import { onMount } from "svelte";
+  import { fade, fly, slide, scale, draw, crossfade } from "svelte/transition";
+
+  const API_KEY = "2H8SUN2YauYx3HjApX5DScnJrYEe3fDrwlNyUHwQ";
+  const API = `https://api.nasa.gov/insight_weather/?api_key=${API_KEY}&feedtype=json&ver=1.0`;
+
+  let info = [];
+  let currentInfo = {};
+  let highTemp;
+  let lowTemp;
+  let wSpeed;
+  let wDirection;
+  let wArrow;
+  let today;
+  let locales = "en-US";
+  let titleText = "Latest weather at Elysium Planitia";
+  let temperatureText = "";
+  let highTempText = "";
+  let lowTempText = "";
+  let todayText = "";
+  let windText = "";
+  let lang = true;
+  let loading = false;
+
+  const LOCAL_STORAGE_MARS_WEATHER_KEY = "stephen.mars-weather-app";
+
+  $: if (lang) {
+    today = new Date().toLocaleString("en-US");
+    titleText = "Latest weather at Elysium Planitia";
+    todayText = "Today";
+    temperatureText = "Temperature";
+    highTempText = "High:";
+    lowTempText = "Low:";
+    windText = "Wind";
+  }
+
+  $: if (!lang) {
+    titleText = "極樂世界的最新天氣";
+    today = new Date().toLocaleString("zh-TW");
+    todayText = "今天";
+    temperatureText = "氣溫";
+    highTempText = "高溫";
+    lowTempText = "低溫";
+    windText = "風";
+  }
+
+  onMount(async () => {
+    lang = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MARS_WEATHER_KEY));
+
+    const res = await fetch(API);
+    const data = await res.json();
+    const { sol_keys, validity_checks, ...solData } = data;
+    console.log(solData);
+
+    const temp = Object.entries(solData).map(([solData, data]) => {
+      return {
+        maxTemp: data.AT.mx,
+        minTemp: data.AT.mn,
+        windSpeed: data.HWS.av,
+        windDirectionDegrees: data.WD.most_common.compass_degrees,
+        windDirectionCardinal: data.WD.most_common.compass_point,
+        date: new Date(data.First_UTC)
+      };
+    });
+
+    info = temp;
+    currentInfo = info[info.length - 1];
+    loading = true;
+
+    const {
+      date,
+      maxTemp,
+      minTemp,
+      windDirectionaCardinal,
+      windDirectionDegrees,
+      windSpeed
+    } = currentInfo;
+
+    highTemp = maxTemp;
+    lowTemp = minTemp;
+    wSpeed = windSpeed;
+    wDirection = windDirectionDegrees;
+    wArrow = windDirectionaCardinal;
+  });
+
+  function switchLang() {
+    lang = !lang;
+    localStorage.setItem(LOCAL_STORAGE_MARS_WEATHER_KEY, JSON.stringify(lang));
+  }
+</script>
+
+<style>
+  :root {
+    --fw-light: 300;
+    --fw-normal: 400;
+    --fw-semi: 500;
+    --fw-bold: 700;
+    --fs-h1: 1.25rem;
+    --fs-h2: 1.75rem;
+    --fs-body: 1rem;
+    --fs-xl: 4rem;
+    --clr-light: #fff;
+    --clr-gray: #989898;
+    --clr-dark: #444;
+    --clr-accent: #d06d6d;
+    --clr-accent-dark: #613131;
+  }
+  .body {
+    position: absolute;
+    top: 10vh;
+    width: 100%;
+    background-image: url(mars.jpg);
+    background-size: cover;
+    min-height: 100vh;
+  }
+  main {
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+    line-height: 1.6;
+    color: var(--clr-light);
+    /* min-height: 100vh; */
+    /* width: 100%; */
+    background: #000;
+  }
+
+  .sr-only:not(:focus):not(:active) {
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+  h1,
+  h2,
+  h3 {
+    line-height: 1;
+  }
+
+  a {
+    color: var(--clr-accent);
+  }
+
+  a:hover {
+    color: var(--clr-accent-dark);
+  }
+
+  .main-title {
+    font-size: var(--fs-h1);
+    font-weight: var(--fw-light);
+    text-transform: uppercase;
+    color: var(--clr-accent);
+    letter-spacing: 2px;
+    grid-column: 1 / -1;
+  }
+
+  .section-title {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-bold);
+    margin: 0;
+  }
+
+  .section-title--date {
+    font-size: var(--fs-xl);
+  }
+
+  .reading {
+    font-size: var(--fs-h1);
+    margin: 0;
+    color: var(--clr-gray);
+  }
+
+  .mars-current-weather {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 6em 2em 2em;
+    max-width: 1000px;
+    margin: 1em;
+  }
+
+  .date {
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
+    grid-column: 1 / 2;
+  }
+
+  .date__day {
+    font-size: var(--fs-h2);
+    margin: 0;
+    color: var(--clr-gray);
+    font-weight: var(--fw-light);
+  }
+
+  .temp {
+    --border: solid 0.25em var(--clr-accent-dark);
+    padding: 2em 0;
+  }
+
+  .wind {
+    display: -ms-grid;
+    display: grid;
+    -webkit-column-gap: 1em;
+    -moz-column-gap: 1em;
+    column-gap: 1em;
+    -ms-grid-columns: min-content 1fr;
+    grid-template-columns: -webkit-min-content 1fr;
+    grid-template-columns: min-content 1fr;
+    -ms-grid-rows: min-content 1fr;
+    grid-template-rows: -webkit-min-content 1fr;
+    grid-template-rows: min-content 1fr;
+    -ms-grid-row-align: start;
+    align-self: start;
+  }
+
+  .wind .section-title,
+  .wind .reading {
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
+    grid-column: 1 / 2;
+  }
+
+  .wind__direction {
+    --size: 4rem;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    display: -ms-grid;
+    display: grid;
+    place-items: center;
+    -ms-grid-column: 2;
+    -ms-grid-column-span: 1;
+    grid-column: 2 / 3;
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .wind__arrow {
+    /* update Custom Props in JS
+        to update the direction */
+    --direction: 180deg;
+    --size: 0.75rem;
+    height: calc(var(--size) * 3);
+    width: var(--size);
+    background: var(--clr-accent-dark);
+    -webkit-clip-path: polygon(50% 0, 0% 100%, 100% 100%);
+    clip-path: polygon(50% 0, 0% 100%, 100% 100%);
+    -webkit-transform: translateY(-50%) rotate(var(--direction));
+    -ms-transform: translateY(-50%) rotate(var(--direction));
+    transform: translateY(-50%) rotate(var(--direction));
+    -webkit-transform-origin: bottom center;
+    -ms-transform-origin: bottom center;
+    transform-origin: bottom center;
+    -webkit-transition: -webkit-transform 500ms ease;
+    transition: -webkit-transform 500ms ease;
+    -o-transition: transform 500ms ease;
+    transition: transform 500ms ease;
+    transition: transform 500ms ease, -webkit-transform 500ms ease;
+  }
+
+  .unit {
+    -ms-grid-column: 3;
+    -ms-grid-column-span: 1;
+    grid-column: 3 / 4;
+    place-self: end;
+    color: var(--clr-light);
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    opacity: 0.7;
+    -webkit-transition: opacity 275ms linear;
+    -o-transition: opacity 275ms linear;
+    transition: opacity 275ms linear;
+  }
+
+  @media (max-width: 768px) {
+    .unit {
+      position: absolute;
+      left: 3em;
+      top: 3em;
+      /* margin-top: 2rem; */
+    }
+  }
+  .section-title--date {
+    margin: 2rem 0 1rem 0;
+  }
+  .unit:hover {
+    opacity: 1;
+  }
+
+  .unit label {
+    cursor: pointer;
+  }
+
+  .unit input {
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(50%);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+
+  .unit__toggle {
+    cursor: pointer;
+    width: 4em;
+    border: 2px solid var(--clr-light);
+    background: transparent;
+    padding: 0;
+    border-radius: 100vmax;
+    margin: 0 1em;
+  }
+
+  .unit__toggle::after {
+    content: "";
+    display: block;
+    background: var(--clr-light);
+    border-radius: 50%;
+    height: 1rem;
+    margin: 3px;
+    margin-left: auto;
+    width: 1rem;
+  }
+
+  :checked ~ .unit__toggle::after {
+    margin-left: 3px;
+  }
+
+  .previous-weather {
+    display: none;
+    background: var(--clr-light);
+    color: var(--clr-dark);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    -webkit-transform: translateY(60%);
+    -ms-transform: translateY(60%);
+    transform: translateY(60%);
+    -webkit-transition: -webkit-transform 350ms ease;
+    transition: -webkit-transform 350ms ease;
+    -o-transition: transform 350ms ease;
+    transition: transform 350ms ease;
+    transition: transform 350ms ease, -webkit-transform 350ms ease;
+    padding: 3rem;
+  }
+
+  .show-previous-weather {
+    position: absolute;
+    background: var(--clr-light);
+    left: 50%;
+    width: 10rem;
+    -webkit-transform: translate(-50%, calc(-100% - 3rem));
+    -ms-transform: translate(-50%, calc(-100% - 3rem));
+    transform: translate(-50%, calc(-100% - 3rem));
+    text-align: center;
+    font-size: var(--fs-h2);
+    line-height: 1;
+    -webkit-clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    cursor: pointer;
+    color: var(--clr-gray);
+    border: 0;
+    font-family: inherit;
+  }
+
+  .show-previous-weather:hover,
+  .show-previous-weather:focus {
+    color: var(--clr-dark);
+  }
+
+  .show-previous-weather span {
+    display: block;
+    -webkit-transform: rotate(0);
+    -ms-transform: rotate(0);
+    transform: rotate(0);
+    -webkit-transition: -webkit-transform 300ms ease;
+    transition: -webkit-transform 300ms ease;
+    -o-transition: transform 300ms ease;
+    transition: transform 300ms ease;
+    transition: transform 300ms ease, -webkit-transform 300ms ease;
+  }
+
+  .previous-days {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+  }
+
+  .previous-weather__title {
+    text-align: center;
+  }
+
+  .previous-day {
+    opacity: 0;
+  }
+
+  .previous-day > * {
+    margin: 0;
+  }
+
+  .previous-day__date {
+    font-size: 0.9rem;
+    color: var(--clr-gray);
+  }
+
+  .previous-day__more-info {
+    cursor: pointer;
+    border: 0;
+    border-radius: 100vmax;
+    background: var(--clr-dark);
+    color: var(--clr-light);
+    text-transform: uppercase;
+    padding: 0.3em 1em;
+    margin-top: 1em;
+  }
+
+  .previous-day__more-info:hover {
+    background: var(--clr-gray);
+  }
+
+  /* .show-weather.previous-weather {
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+}
+
+.show-weather.previous-weather .show-previous-weather span {
+  display: block;
+  -webkit-transform: rotate(180deg) translateY(-6px);
+      -ms-transform: rotate(180deg) translateY(-6px);
+          transform: rotate(180deg) translateY(-6px);
+}
+
+.show-weather.previous-weather .previous-weather__title,
+.show-weather.previous-weather .previous-day {
+  -webkit-animation: slideUpIn 750ms forwards;
+          animation: slideUpIn 750ms forwards;
+}
+
+.show-weather.previous-weather .previous-weather__title {
+  text-align: left;
+}
+
+.show-weather.previous-weather .previous-day:nth-child(1) {
+  -webkit-animation-delay: 100ms;
+          animation-delay: 100ms;
+}
+
+.show-weather.previous-weather .previous-day:nth-child(2) {
+  -webkit-animation-delay: 125ms;
+          animation-delay: 125ms;
+}
+
+.show-weather.previous-weather .previous-day:nth-child(3) {
+  -webkit-animation-delay: 150ms;
+          animation-delay: 150ms;
+}
+
+.show-weather.previous-weather .previous-day:nth-child(4) {
+  -webkit-animation-delay: 175ms;
+          animation-delay: 175ms;
+}
+
+.show-weather.previous-weather .previous-day:nth-child(5) {
+  -webkit-animation-delay: 200ms;
+          animation-delay: 200ms;
+}
+
+.show-weather.previous-weather .previous-day:nth-child(6) {
+  -webkit-animation-delay: 225ms;
+          animation-delay: 225ms;
+}
+
+.show-weather.previous-weather .previous-day:nth-child(7) {
+  -webkit-animation-delay: 300ms;
+          animation-delay: 300ms;
+} */
+
+  @-webkit-keyframes slideUpIn {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(50%);
+      transform: translateY(50%);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0);
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideUpIn {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(50%);
+      transform: translateY(50%);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0);
+      transform: translateY(0);
+    }
+  }
+
+  @media (min-width: 600px) {
+    .mars-current-weather {
+      display: -ms-grid;
+      display: grid;
+      row-gap: 2em;
+      -ms-grid-columns: (1fr) [2];
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .date {
+      grid-column: 1 / -1;
+    }
+    .temp {
+      -ms-grid-column: 1;
+      -ms-grid-column-span: 1;
+      grid-column: 1 / 2;
+      padding: 0;
+    }
+    .wind {
+      -ms-grid-column: 2;
+      -ms-grid-column-span: 1;
+      grid-column: 2 / 3;
+    }
+  }
+  @media (max-width: 575px) {
+    .info {
+      margin-top: 1rem;
+    }
+  }
+  @media (min-width: 900px) {
+    :root {
+      --fs-h1: 1.5rem;
+      --fs-h2: 2.25rem;
+      --fs-body: 1rem;
+      --fs-xl: 4.5rem;
+    }
+    /* body {
+    height: 100vh;
+    overflow: hidden;
+  } */
+    .date {
+      -ms-grid-column: 1;
+      -ms-grid-column-span: 1;
+      grid-column: 1 / 2;
+    }
+    .mars-current-weather {
+      padding: 2em;
+      margin: 4em 4em 0 4em;
+      -ms-grid-columns: (1fr) [3];
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 2em;
+    }
+    .temp {
+      -ms-grid-column: 2;
+      -ms-grid-column-span: 1;
+      grid-column: 2 / 3;
+      border-left: var(--border);
+      border-right: var(--border);
+      padding: 0 2em;
+    }
+    .wind {
+      -ms-grid-column: 3;
+      -ms-grid-column-span: 1;
+      grid-column: 3 / 4;
+    }
+    .wind .section-title,
+    .wind .reading {
+      -ms-grid-column: 2;
+      -ms-grid-column-span: 1;
+      grid-column: 2 / 3;
+    }
+    .wind__direction {
+      --size: 6rem;
+      -ms-grid-column: 1;
+      -ms-grid-column-span: 1;
+      grid-column: 1 / 2;
+      -ms-grid-row: 1;
+      -ms-grid-row-span: 2;
+      grid-row: 1 / span 2;
+    }
+    .wind__arrow {
+      --size: 1rem;
+    }
+    .info {
+      -ms-grid-column: 1;
+      -ms-grid-column-span: 2;
+      grid-column: 1 / 3;
+    }
+  }
+  /*# sourceMappingURL=main.css.map */
+</style>
+
+<div class="body" transition:fade={{ duration: 500 }}>
+
+  <main class="mars-current-weather" >
+    <h1
+      class="main-title"
+      style="display: flex; justify-content: space-between">
+      {titleText}
+      <i class="fas fa-globe" on:click={switchLang} style="cursor: pointer" />
+    </h1>
+
+    <div class="date">
+      <h2 class="section-title section-title--date">{todayText}</h2>
+      <p class="date__day">{today}</p>
+    </div>
+
+    <div class="temp">
+      <h2 class="section-title">{temperatureText}</h2>
+      <p class="reading">
+        {highTempText}
+        {#if loading}
+          {highTemp} °C
+        {:else}
+          <i class="fas fa-spinner fa-spin" />
+        {/if}
+      </p>
+      <p class="reading">
+        {lowTempText}
+        {#if loading}
+          {lowTemp} °C
+        {:else}
+          <i class="fas fa-spinner fa-spin" />
+        {/if}
+      </p>
+    </div>
+
+    <div class="wind">
+      <h2 class="section-title">{windText}</h2>
+      <p class="reading">
+        <span>
+          {#if loading}
+            {wSpeed} kph
+          {:else}
+            <i class="fas fa-spinner fa-spin" />
+          {/if}
+        </span>
+        <span data-speed-unit />
+      </p>
+
+      <div class="wind__direction">
+        <p class="sr-only">{wDirection}</p>
+        <div class="wind__arrow">{wArrow}</div>
+      </div>
+    </div>
+
+    <div class="info">
+      <p>
+        {#if lang}
+          InSight is taking daily weather measurements (temperature, wind,
+          pressure) on the surface of Mars at Elysium Planitia, a flat, smooth
+          plain near Mars’ equator.
+        {:else}
+          InSight
+          每天在火星表面的極樂世界（位於火星赤道附近的一個平坦而光滑的平原）進行溫度，風，壓力等天氣測量。
+        {/if}
+      </p>
+      <p>
+        {#if lang}
+          This is only a part of InSight’s mission.
+        {:else}這只是 InSight 任務的一部分。{/if}
+        <a href="https://mars.nasa.gov/insight/mission/overview/">
+          {#if lang}Click here{:else}請點擊這裡{/if}
+        </a>
+        {#if lang}to learn more。{:else}了解更多。{/if}
+      </p>
+    </div>
+
+    <div class="unit">
+      <label for="cel">°C</label>
+      <input type="radio" id="cel" name="unit" checked />
+      <!-- when unit__toggle is clicked checkbox needs to change -->
+      <button class="unit__toggle" data-unit-toggle />
+      <label for="fah">°F</label>
+      <input type="radio" id="fah" name="unit" />
+    </div>
+
+  </main>
+
+  <div class="previous-weather">
+    <!-- When clicked, toggle '.show-weather' to .previous-weather div -->
+    <button for="weather-toggle" class="show-previous-weather">
+      <span>&#8593;</span>
+      <span class="sr-only">Show previous weather</span>
+    </button>
+
+    <h2 class="main-title previous-weather__title">Previous 7 days</h2>
+
+    <div class="previous-days" data-previous-sols />
+  </div>
+</div>
+
+<template data-previous-sol-template>
+  <div class="previous-day">
+    <h3 class="previous-day__sol">
+      Sol
+      <span data-sol />
+    </h3>
+    <p class="previous-day__date" data-date />
+    <p class="previous-day__temp">
+      High:
+      <span data-temp-high />
+      °
+      <span data-temp-unit />
+    </p>
+    <p class="previous-day__temp">
+      Low:
+      <span data-temp-low />
+      °
+      <span data-temp-unit />
+    </p>
+    <button class="previous-day__more-info" data-select-button>
+      more info
+    </button>
+  </div>
+</template>

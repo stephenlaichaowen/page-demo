@@ -12,7 +12,7 @@
 
 
 <div class="body">
-  <nav>
+  <!-- <nav>
     <div class="hamburger" on:click={toggleMenu}>
       <div class="line" />
       <div class="line" />
@@ -29,7 +29,7 @@
         <a href="#projects">Projects</a>
       </li>
     </ul>
-  </nav>
+  </nav> -->
   <section class="landing">
     <img src="./circles.svg" alt="dots" />
     <h1>Dot</h1>
@@ -45,7 +45,7 @@
   .body {
     font-family: sans-serif;
   }
-  nav {
+  /* nav {
     height: 10vh;
     background: #5b78c7;
   }
@@ -53,7 +53,6 @@
     display: flex;
     list-style: none;
     width: 50%;
-    /* background: lightcoral; */
     height: 100%;
     justify-content: space-around;
     align-items: center;
@@ -63,7 +62,7 @@
     color: white;
     text-decoration: none;
     font-size: 16px;
-  }
+  } */
   .landing {
     height: 90vh;
     display: flex;
@@ -76,7 +75,7 @@
     color: #ae5fce;
   }
   @media (max-width: 575px) {
-    .line {
+    /* .line {
       width: 30px;
       height: 3px;
       background: white;
@@ -108,11 +107,11 @@
       clip-path: circle(1000px at 90% -15%);
       -webkit-clip-path: circle(1000px at 90% -15%);
       pointer-events: all;
-    }
+    } */
     .landing {
       flex-direction: column;
     }
-    .nav-links li {
+    /* .nav-links li {
       opacity: 0;
     }
     .nav-links li a {
@@ -129,7 +128,7 @@
     }
     li.fade {
       opacity: 1;
-    }
+    } */
   }
 </style>
 

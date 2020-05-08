@@ -1,58 +1,105 @@
 <script>
-	export let segment;
+  export let segment;
+  
+  let open = false
+  let fade = false
+
+  function toggleMenu() { 
+    open = !open 
+    fade = !fade
+  }
 </script>
 
 <style>
-	nav {
-		border-bottom: 1px solid rgba(255,62,0,0.1);
-		font-weight: 300;
-		padding: 0 1em;
-	}
-
-	ul {
-		margin: 0;
-		padding: 0;
-	}
-
-	/* clearfix */
-	ul::after {
-		content: '';
-		display: block;
-		clear: both;
-	}
-
-	li {
-		display: block;
-		float: left;
-	}
-
-	[aria-current] {
-		position: relative;
-		display: inline-block;
-	}
-
-	[aria-current]::after {
-		position: absolute;
-		content: '';
-		width: calc(100% - 1em);
-		height: 2px;
-		background-color: rgb(255,62,0);
-		display: block;
-		bottom: -1px;
-	}
-
-	a {
-		text-decoration: none;
-		padding: 1em 0.5em;
-		display: block;
-	}
+	nav {	
+    height: 10vh;
+    background: #5b78c7;
+    position: relative;
+  }
+  
+  .nav-links {
+    display: flex;
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
+    align-items: center;
+    margin-left: auto;
+  }
+  .nav-links li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  @media (max-width: 768px) {
+     .line {
+      width: 30px;
+      height: 3px;
+      background: white;
+      margin: 5px;
+    }
+    .burger {
+      position: absolute;
+      cursor: pointer;
+      right: 5%;
+      top: 50%;
+      transform: translate(-5%, -50%);
+      z-index: 15;
+    }
+    .nav-links {
+      position: absolute;
+      background: #5b78c7;
+      height: 100vh;
+      width: 100%;
+      flex-direction: column;
+      clip-path: circle(100px at 90% -15%);
+      -webkit-clip-path: circle(100px at 90% -15%);
+      transition: all 0.5s ease-out;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .nav-links.open {
+      clip-path: circle(1000px at 90% -15%);
+      -webkit-clip-path: circle(1000px at 90% -15%);
+      pointer-events: all;
+    }
+    
+    .nav-links li {
+      opacity: 0;
+      transition: all 0.5s ease 0.1s;
+    }
+    .nav-links li a {
+      font-size: 25px;
+    }
+    /* .nav-links li:nth-child(1) {
+      transition: all 0.5s ease 0.1s;
+    }
+    .nav-links li:nth-child(2) {
+      transition: all 0.5s ease 0.2s;
+    }
+    .nav-links li:nth-child(3) {
+      transition: all 0.5s ease 0.3s;
+    } */
+    li.fade {
+      opacity: 1;
+    }
+  }
 </style>
 
 <nav>
-	<ul>
-		<li><a aria-current='{segment === "demo1" ? "page" : undefined}' href='demo1'>Demo 1</a></li>
-		<li><a aria-current='{segment === "demo2" ? "page" : undefined}' href='demo2'>Demo 2</a></li>
-		<li><a aria-current='{segment === "demo3" ? "page" : undefined}' href='demo3'>Demo 3</a></li>		
-		<li><a aria-current='{segment === "demo4" ? "page" : undefined}' href='demo4'>Demo 4</a></li>		
+  <div class="burger" on:click={toggleMenu}>
+    <div class="line"></div>
+    <div class="line"></div>
+    <div class="line"></div>
+  </div>
+	<ul class="nav-links" class:open>
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo1" ? "page" : undefined}' href='demo1'>Demo 1</a></li>
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo2" ? "page" : undefined}' href='demo2'>Demo 2</a></li>
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo3" ? "page" : undefined}' href='demo3'>Demo 3</a></li>		
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "MarsWeather" ? "page" : undefined}' href='MarsWeather'>Mars Weather</a></li>		
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo5" ? "page" : undefined}' href='demo5'>Demo 5</a></li>		
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo6" ? "page" : undefined}' href='demo6'>Demo 6</a></li>		
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo7" ? "page" : undefined}' href='demo7'>Demo 7</a></li>		
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "HandWash" ? "page" : undefined}' href='HandWash'>Hand Wash</a></li>		
 	</ul>
 </nav>
