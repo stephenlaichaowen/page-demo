@@ -97,7 +97,7 @@
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo2" ? "page" : undefined}' href='demo2'>Demo 2</a></li>
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "Covid19Tracker" ? "page" : undefined}' href='Covid19Tracker'>Covid19Tracker</a></li>		
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "MarsWeather" ? "page" : undefined}' href='MarsWeather'>MarsWeather</a></li>		
-		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo5" ? "page" : undefined}' href='demo5'>Demo 5</a></li>		
+		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "Estimator" ? "page" : undefined}' href='Estimator'>Estimator</a></li>		
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo6" ? "page" : undefined}' href='demo6'>Demo 6</a></li>		
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo7" ? "page" : undefined}' href='demo7'>Demo 7</a></li>		
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "HandWash" ? "page" : undefined}' href='HandWash'>HandWash</a></li>		

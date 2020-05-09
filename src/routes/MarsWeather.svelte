@@ -427,6 +427,11 @@
     background: var(--clr-gray);
   }
 
+  @media (max-width: 900px) {
+    .body {
+      margin-top: 0;
+    }
+  }
   /* .show-weather.previous-weather {
   -webkit-transform: translateY(0);
       -ms-transform: translateY(0);
