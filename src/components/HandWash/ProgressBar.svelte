@@ -1,3 +1,7 @@
+<script>
+  export let progress = 0
+</script>
+
 <style>
   .progress-container {
     width: 500px;
@@ -6,8 +10,9 @@
   }
   .progress-bar {
     /* width: 20%; */
-    height: 30px;
+    height: 40px;
     background: rgb(77, 199, 55);
+    /* padding: 5px 0; */
   }
   @media (max-width: 575px) {
     .progress-container {
@@ -18,8 +23,8 @@
 
 <div class="container">
   <div class="progress-container">
-    <div class="progress-bar" style="width: 20%">
-      <span class="sr-only">%</span>
+    <div class="progress-bar" style="width: {progress}%">
+      <span class="sr-only">%{ progress }</span>
     </div>
   </div>
 </div>

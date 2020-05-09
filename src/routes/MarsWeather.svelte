@@ -106,9 +106,7 @@
     --clr-accent: #d06d6d;
     --clr-accent-dark: #613131;
   }
-  .body {
-    position: absolute;
-    top: 10vh;
+  .body {   
     width: 100%;
     background-image: url(mars.jpg);
     background-size: cover;

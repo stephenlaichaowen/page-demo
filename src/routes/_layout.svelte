@@ -5,9 +5,10 @@
 </script>
 
 <style>
-  /* main {
-    padding: 2rem;
-  } */
+  main {
+    padding: 0;
+    margin-top: 0;
+  }
 </style>
 
 <Nav {segment}/>
