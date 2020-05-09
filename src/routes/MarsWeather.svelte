@@ -111,14 +111,14 @@
     background-image: url(mars.jpg);
     background-size: cover;
     min-height: 100vh;
+    margin-top: -7vh;
+    padding-top: 2rem;
   }
   main {
     position: relative;
     font-family: "Montserrat", sans-serif;
     line-height: 1.6;
     color: var(--clr-light);
-    /* min-height: 100vh; */
-    /* width: 100%; */
     background: #000;
   }
 
@@ -602,9 +602,8 @@
   /*# sourceMappingURL=main.css.map */
 </style>
 
-<div class="body" transition:fade={{ duration: 500 }}>
-
-  <main class="mars-current-weather" >
+<div class="body">
+  <main class="mars-current-weather" transition:fade={{ duration: 500 }}>
     <h1
       class="main-title"
       style="display: flex; justify-content: space-between">
