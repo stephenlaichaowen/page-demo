@@ -1,15 +1,16 @@
 <script>
-  import Timer from '../components/HandWash/Timer.svelte'
-  import HowTo from '../components/HandWash/HowTo.svelte'
-  
-  let imgHref = 'https://www.who.int/gpsc/clean_hands_protection/en/'
-  let soundHref = 'https://freesound.org/people/metrostock99/sounds/345086'
-  let soundSrc = 'handwashing/sound.wav'
-  let audio
+  import { fade } from 'svelte/transition'
+  import Timer from "../components/HandWash/Timer.svelte";
+  import HowTo from "../components/HandWash/HowTo.svelte";
+
+  let imgHref = "https://www.who.int/gpsc/clean_hands_protection/en/";
+  let soundHref = "https://freesound.org/people/metrostock99/sounds/345086";
+  let soundSrc = "handwashing/sound.wav";
+  let audio;
 
   function timerEnds(e) {
     // alert(`timer ends !`)
-    audio.play()
+    audio.play();
   }
 </script>
 
@@ -17,7 +18,8 @@
   h1 {
     margin-top: 2rem;
   }
-  h1, h3 {
+  h1,
+  h3 {
     text-align: center;
   }
   @media (max-width: 575px) {
@@ -27,17 +29,20 @@
   }
 </style>
 
-<h1>HandWashing App</h1>
+<div class="body" transition:fade={{ duration: 300 }}>
+  <h1>HandWashing App</h1>
 
-<Timer on:end={timerEnds} />
+  <Timer on:end={timerEnds} />
 
-<HowTo  />
+  <HowTo />
 
-<h3>
-  <a href={imgHref}>Picture Source</a>
-  <a href={soundHref}>Sound Source</a>
-</h3>
+  <h3>
+    <a href={imgHref}>Picture Source</a>
+    <a href={soundHref}>Sound Source</a>
+  </h3>
 
-<audio bind:this={audio}>
-  <source src={soundSrc}>
-</audio>
+  <audio bind:this={audio}>
+    <source src={soundSrc} />
+  </audio>
+
+</div>

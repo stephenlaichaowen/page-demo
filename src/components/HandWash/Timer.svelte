@@ -2,10 +2,14 @@
   import { createEventDispatcher } from "svelte";
   import ProgressBar from "./ProgressBar.svelte";
 
-  const totalSeconds = 5;
-  let isRunning = false;
-  let secondsLeft = totalSeconds;
+  let totalSeconds 
+  let secondsLeft
   let progress
+  let inputNumber = 1
+  let isRunning = false;
+  
+  $: totalSeconds = inputNumber
+  $: secondsLeft = totalSeconds
 
   const dispatch = createEventDispatcher();
 
@@ -15,12 +19,15 @@
     isRunning = true;
     let timer = setInterval(() => {
       secondsLeft -= 1;
+      // inputNumber -= 1
       if (secondsLeft <= 0 && progress == 100) {
         clearInterval(timer);
         isRunning = false;        
-        secondsLeft = totalSeconds;
+        secondsLeft = totalSeconds;        
+
+        // if (inputNumber <= 0)  inputNumber = totalSeconds
         dispatch("end");
-      }
+      } 
     }, 1000);
   }
 </script>
@@ -48,7 +55,21 @@
     cursor: not-allowed;
   }
   h2 {
-    text-align-last: left;
+    /* text-align-last: left; */
+    /* border: 1px solid; */
+    display: flex;
+    width: 500px;
+  }
+  .title, .inputBox {
+    flex: 1;
+  }
+  .title {
+    text-align: right;
+    padding-right: 1rem;
+  }
+  .inputBox {
+    font-size: 18px;
+    padding: 0 1rem;
   }
   @media (max-width: 575px) {
     h2 {
@@ -63,9 +84,11 @@
   }
 </style>
 
-<div class="container">
-  <h2>Seconds Left: {secondsLeft}</h2>
-  <h1>{ progress }</h1>
+<div class="container">  
+  <h2>
+    <span class="title">Seconds Left : { secondsLeft }</span>
+    <input disabled={isRunning} class="inputBox" type="number" min="0" bind:value={inputNumber}>
+  </h2>
   <ProgressBar {progress} />
   <div class="btn-container">
     <button disabled={isRunning} class="start" on:click={startTimer}>

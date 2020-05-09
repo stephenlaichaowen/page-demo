@@ -603,7 +603,7 @@
 </style>
 
 <div class="body">
-  <main class="mars-current-weather" transition:fade={{ duration: 500 }}>
+  <main class="mars-current-weather" transition:fade={{ duration: 300 }}>
     <h1
       class="main-title"
       style="display: flex; justify-content: space-between">
