@@ -5,7 +5,7 @@
   let totalSeconds 
   let secondsLeft
   let progress
-  let inputNumber = 1
+  let inputNumber = 0
   let isRunning = false;
   
   $: totalSeconds = inputNumber
@@ -18,14 +18,11 @@
   function startTimer() {
     isRunning = true;
     let timer = setInterval(() => {
-      secondsLeft -= 1;
-      // inputNumber -= 1
+      secondsLeft -= 1
       if (secondsLeft <= 0 && progress == 100) {
         clearInterval(timer);
         isRunning = false;        
-        secondsLeft = totalSeconds;        
-
-        // if (inputNumber <= 0)  inputNumber = totalSeconds
+        secondsLeft = totalSeconds
         dispatch("end");
       } 
     }, 1000);
@@ -33,7 +30,7 @@
 </script>
 
 <style>
-  .container {
+  .wrapper {
     flex-direction: column;
     width: 50%;
     margin: 1rem auto;
@@ -55,25 +52,30 @@
     cursor: not-allowed;
   }
   h2 {
-    /* text-align-last: left; */
     /* border: 1px solid; */
     display: flex;
     width: 500px;
+    flex-direction: column;
   }
-  .title, .inputBox {
+  /* .title, .inputBox {
     flex: 1;
-  }
-  .title {
+  } */
+  /* .title {
     text-align: right;
     padding-right: 1rem;
-  }
+  } */
   .inputBox {
+    margin: 0.5rem 0;
     font-size: 18px;
-    padding: 0 1rem;
+    padding: 0.5rem;
   }
   @media (max-width: 575px) {
     h2 {
       font-size: 20px;
+      width: 90vw;
+    }
+    .title, .inputBox {
+      width: 100%;
     }
     .start {
       width: 100%;
@@ -84,10 +86,10 @@
   }
 </style>
 
-<div class="container">  
+<div class="wrapper">  
   <h2>
+    <input disabled={isRunning} placeholder="Please enter seconds..." class="inputBox" type="number" min="0" bind:value={inputNumber}>
     <span class="title">Seconds Left : { secondsLeft }</span>
-    <input disabled={isRunning} class="inputBox" type="number" min="0" bind:value={inputNumber}>
   </h2>
   <ProgressBar {progress} />
   <div class="btn-container">

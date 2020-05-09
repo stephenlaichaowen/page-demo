@@ -17,7 +17,7 @@
     position: relative;
   }
   
-  .nav-links {
+  .menu-links {
     display: flex;
     list-style: none;
     width: 100%;
@@ -26,7 +26,10 @@
     align-items: center;
     margin-left: auto;
   }
-  .nav-links li a {
+  .menu-links li {
+    opacity: 1;
+  }
+  .menu-links li a {
     color: white;
     text-decoration: none;
     font-size: 16px;
@@ -46,7 +49,7 @@
       transform: translate(-5%, -50%);
       z-index: 15;
     }
-    .nav-links {
+    .menu-links {
       position: absolute;
       background: #5b78c7;
       height: 100vh;
@@ -58,26 +61,27 @@
       pointer-events: none;
       z-index: 10;
     }
-    .nav-links.open {
+    .menu-links.open {
       clip-path: circle(1000px at 90% -15%);
       -webkit-clip-path: circle(1000px at 90% -15%);
       pointer-events: all;
     }
     
-    .nav-links li {
+    .menu-links li {
       opacity: 0;
+      /* opacity: 1; */
       transition: all 0.5s ease 0.1s;
     }
-    .nav-links li a {
+    .menu-links li a {
       font-size: 25px;
     }
-    /* .nav-links li:nth-child(1) {
+    /* .menu-links li:nth-child(1) {
       transition: all 0.5s ease 0.1s;
     }
-    .nav-links li:nth-child(2) {
+    .menu-links li:nth-child(2) {
       transition: all 0.5s ease 0.2s;
     }
-    .nav-links li:nth-child(3) {
+    .menu-links li:nth-child(3) {
       transition: all 0.5s ease 0.3s;
     } */
     li.fade {
@@ -92,7 +96,7 @@
     <div class="line"></div>
     <div class="line"></div>
   </div>
-	<ul class="nav-links" class:open>
+	<ul class="menu-links" class:open>
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo1" ? "page" : undefined}' href='demo1'>Demo 1</a></li>
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "demo2" ? "page" : undefined}' href='demo2'>Demo 2</a></li>
 		<li class:fade on:click={toggleMenu}><a aria-current='{segment === "Covid19Tracker" ? "page" : undefined}' href='Covid19Tracker'>Covid19Tracker</a></li>		

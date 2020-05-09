@@ -17,14 +17,27 @@
 <style>
   h1 {
     margin-top: 2rem;
-  }
-  h1,
-  h3 {
     text-align: center;
   }
+  h3 {
+    /* border: 1px solid; */
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem auto;
+    width: 550px;
+  }
   @media (max-width: 575px) {
+    .body {
+      padding-bottom: 0.5rem;
+    }
     h1 {
       font-size: 28px;
+    }
+    h3 {
+      font-size: 20px;
+      width: 90%;
+      margin: 0.5rem auto;
+      /* border: 1px solid; */
     }
   }
 </style>

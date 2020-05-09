@@ -21,7 +21,7 @@
   }
 </style>
 
-<div class="container">
+<div class="wrapper">
   <div class="progress-container">
     <div class="progress-bar" style="width: {progress}%">
       <span class="sr-only">%{ progress }</span>

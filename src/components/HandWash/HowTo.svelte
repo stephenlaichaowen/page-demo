@@ -17,7 +17,7 @@
   }
 </style>
 
-<div class="container">
+<div class="wrapper">
   <div class="img-container">
     <img {src} {alt} />
   </div>
