@@ -35,12 +35,13 @@
     font-family: "Roboto", sans-serif;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    /* grid-template-rows: repeat(4, 1fr); */
     grid-gap: 10px;
   }
 
   .imgBox > div {
     cursor: pointer;
-    height: 210px;
+    height: 25vh;
     background-size: cover;
     background-attachment: fixed;
 

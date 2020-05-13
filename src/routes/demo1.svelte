@@ -107,6 +107,7 @@
     color: white;
     z-index: 5;
   }
+  /* add a semi-transparent layer on top of image */
   .hero::after {
     content: "";
     background: black;
@@ -128,10 +129,6 @@
 
 <div class="body">
   <header>
-    <!-- <nav>
-      <h3 class="logo" bind:this={logo}>Dream Vacation</h3>
-      <i class="fas fa-bars fa-2x hamburger" bind:this={burger} />
-    </nav> -->
     <section>
       <div class="hero" bind:this={hero}>
         <img src={vacation} alt="vacation" />
